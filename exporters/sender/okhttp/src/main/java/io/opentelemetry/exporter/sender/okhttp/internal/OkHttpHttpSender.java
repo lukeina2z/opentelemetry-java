@@ -13,7 +13,10 @@ import io.opentelemetry.exporter.internal.marshal.Marshaler;
 import io.opentelemetry.sdk.common.CompletableResultCode;
 import io.opentelemetry.sdk.common.export.ProxyOptions;
 import io.opentelemetry.sdk.common.export.RetryPolicy;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +37,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 import okio.BufferedSink;
 import okio.Okio;
 
@@ -111,6 +115,23 @@ public final class OkHttpHttpSender implements HttpSender {
     this.headerSupplier = headerSupplier;
   }
 
+  public static void saveRequestBodyToFile(RequestBody requestBody, File outputFile) {
+    // Create a buffer and write the RequestBody content into it
+    Buffer buffer = new Buffer();
+    try {
+      requestBody.writeTo(buffer);
+    } catch (IOException ex) {
+      // ex.printStackTrace();
+      return;
+    }
+    // Save buffer contents to file
+    try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+      outputStream.write(buffer.readByteArray());
+    } catch (IOException e) {
+      // e.printStackTrace();
+    }
+  }
+
   @Override
   public void send(
       Marshaler marshaler,
@@ -129,6 +150,10 @@ public final class OkHttpHttpSender implements HttpSender {
       requestBuilder.addHeader("Content-Encoding", compressor.getEncoding());
       requestBuilder.post(new CompressedRequestBody(compressor, body));
     } else {
+      String home = System.getProperty("user.home");
+      String filePath = Paths.get(home, "x-java-otlp.bin").toString();
+      File file = new File(filePath);
+      saveRequestBodyToFile(body, file);
       requestBuilder.post(body);
     }
 
@@ -202,6 +227,17 @@ public final class OkHttpHttpSender implements HttpSender {
       this.mediaType = mediaType;
     }
 
+    static void saveBytesToFile(Marshaler marshaler, String filePath) {
+      try (FileOutputStream fos = new FileOutputStream(filePath)) {
+        marshaler.writeBinaryTo(fos);
+        fos.flush();
+        // logger.info("Successfully saved to: " + filePath + " size: " + data.length);
+        fos.close();
+      } catch (IOException ex) {
+        // e.printStackTrace();
+      }
+    }
+
     @Override
     public long contentLength() {
       return contentLength;
@@ -214,10 +250,17 @@ public final class OkHttpHttpSender implements HttpSender {
 
     @Override
     public void writeTo(BufferedSink bufferedSink) throws IOException {
+
+      String home = System.getProperty("user.home");
+      String filePath = "";
+
       if (exportAsJson) {
+        filePath = Paths.get(home, "java-otlp.json").toString();
         marshaler.writeJsonTo(bufferedSink.outputStream());
       } else {
         marshaler.writeBinaryTo(bufferedSink.outputStream());
+        filePath = Paths.get(home, "java-otlp.bin").toString();
+        saveBytesToFile(marshaler, filePath);
       }
     }
   }

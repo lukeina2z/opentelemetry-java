@@ -1,0 +1,50 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "ZzzOTelApp",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "mainClass": "io.opentelemetry.ZzzOTelApp",
+      "preLaunchTask": "Assemble with Gradle"
+    },
+    {
+      "type": "java",
+      "name": "jar Manual-Tracing",
+      "request": "launch",
+      "mainClass": "io.opentelemetry.example.tracing.ManualTracingExample",
+      "args": "",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "vmArgs": "",
+      "projectName": "",
+      "modulePaths": [],
+      "classPaths": [
+        "${workspaceFolder}/zzz-examples/manual-tracing/build/libs/manual-tracing-0.1.0-SNAPSHOT-all.jar"
+      ]
+    },
+    {
+      "type": "java",
+      "name": "jar Remote Sampler",
+      "request": "launch",
+      "mainClass": "io.opentelemetry.ZzzOTelApp",
+      "args": "",
+      "cwd": "${workspaceFolder}/zzz-examples/zzz-trace-context",
+      "console": "internalConsole",
+      "vmArgs": "",
+      "projectName": "",
+      "stopOnEntry": false,
+      "modulePaths": [],
+      // "sourcePaths": [
+      //   "${workspaceFolder}/../opentelemetry-java-contrib/aws-xray/src/main/java/io/opentelemetry/contrib/awsxray"
+      // ],
+      "classPaths": [
+        "${workspaceFolder}/zzz-examples/zzz-trace-context/build/libs/zzz-trace-context.jar"
+      ]
+    }
+  ]
+}

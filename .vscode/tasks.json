@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Assemble with Gradle",
+      "type": "shell",
+      "osx": {
+        "command": "./gradlew"
+      },
+      "command": "gradlew",
+      "args": ["assemble", "shadowjar"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gradle"]
+    }
+  ]
+}
