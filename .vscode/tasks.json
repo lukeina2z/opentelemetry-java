@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Assemble with Gradle",
+      "type": "shell",
+      "windows": {
+        "command": "gradlew.bat"
+      },
+      "command": "./gradlew",
+      "args": ["assemble", "shadowjar"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gradle"]
+    },
+    {
+      "label": "Debug integration-tests:tracecontext",
+      "type": "shell",
+      "windows": {
+        "command": "gradlew.bat"
+      },
+      "command": "./gradlew",
+      "args": [
+        ":integration-tests:tracecontext:test",
+        "--debug-jvm"
+      ],
+      "group": "test",
+      "problemMatcher": ["$gradle"]
+    },
+    {
+      "label": "Build tracecontext JAR",
+      "type": "shell",
+      "windows": {
+        "command": "gradlew.bat"
+      },
+      "command": "./gradlew",
+      "args": [":integration-tests:tracecontext:shadowJar"],
+      "group": "build",
+      "problemMatcher": ["$gradle"]
+    }
+  ]
+}

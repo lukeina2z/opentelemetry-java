@@ -1,0 +1,7 @@
+{
+  // Helps the Java extension find sources in this complex project
+  "java.project.sourcePaths": [
+    "integration-tests/tracecontext/src"
+  ],
+  "java.compile.nullAnalysis.mode": "automatic"
+}

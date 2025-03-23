@@ -132,6 +132,9 @@ public final class Application {
             .decorator(LoggingService.newDecorator())
             .build();
     server.start().join();
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> server.stop().join()));
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      server.stop()
+      .join();
+    }));
   }
 }

@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug tracecontext integration tests",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005,
+      "preLaunchTask": "Debug integration-tests:tracecontext"
+    },
+    {
+      "type": "java",
+      "name": "Launch tracecontext integration-test",
+      "request": "launch",
+      "stopOnEntry": false,
+      "mainClass": "io.opentelemetry.Application",
+      "preLaunchTask": "Build tracecontext JAR"
+    }
+  ]
+}
