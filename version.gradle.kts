@@ -1,7 +1,7 @@
-val snapshot = true
+val snapshot = false
 
 allprojects {
-  var ver = "1.53.0"
+  var ver = "1.53.99"
   val release = findProperty("otel.release")
   if (release != null) {
     ver += "-" + release
